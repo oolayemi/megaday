@@ -15,7 +15,7 @@ class ApiResponse
     {
         return response()->json([
             'success' => true,
-            'status' => ApiResponseEnum::success,
+            'status' => ApiResponseEnum::success->name,
             'message' => $message,
             'data' => $data,
         ], $code);
@@ -25,7 +25,7 @@ class ApiResponse
     {
         return response()->json([
             'success' => false,
-            'status' => ApiResponseEnum::failed,
+            'status' => ApiResponseEnum::failed->name,
             'message' => $message,
             'data' => $data,
         ], $code);

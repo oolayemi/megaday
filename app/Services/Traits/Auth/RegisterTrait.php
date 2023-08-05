@@ -4,17 +4,17 @@ namespace App\Services\Traits\Auth;
 
 use App\Models\User;
 use App\Services\Actions\OtpAction;
-use App\Services\Enums\ApiResponseEnum;
 use App\Services\Enums\ProviderEnum;
 use App\Services\Helpers\ApiResponse;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Laravel\Socialite\Facades\Socialite;
 
 trait RegisterTrait
 {
-
-    public function register(array $userDetails): \Illuminate\Http\JsonResponse
+    use LoginTrait;
+    public function register(array $userDetails): JsonResponse
     {
+        $userDetails['provider'] = ProviderEnum::email->name;
         $user = $this->createAccount($userDetails);
 
         //send otp
@@ -23,26 +23,14 @@ trait RegisterTrait
 
         //send email verification mail
 
-        $dataToken = ['token' => $user->createToken($userDetails['email'])];
-        return ApiResponse::success("Account created successfully", $dataToken);
+        $dataToken = ['token' => $user->createToken($userDetails['email'])->plainTextToken];
+
+        return ApiResponse::success('Account created successfully', $dataToken);
 
     }
 
-
-    /**
-     * @param array $userDetails
-     * @return User
-     */
     protected function createAccount(array $userDetails): User
     {
-//        [
-//            'first_name' => $userNames[0],
-//            'last_name' => $userNames[1],
-//            'email' => $userGenerated->getEmail(),
-//            'image_url' => $userGenerated->getAvatar(),
-//            'fcm_token' => $request->fcm_token,
-//            'provider' => $request->provider
-//        ]
         $user = User::create($userDetails);
         $user->wallet()->create();
         $user->assignRole('customer');
@@ -51,18 +39,41 @@ trait RegisterTrait
     }
 
     //social sign ins
-    public function socialSignIn(ProviderEnum $providerEnum, array $userDetails) {
-        $generatedUser = Socialite::driver($providerEnum->name)->userFromToken($userDetails['token']);
+    public function socialSignIn(ProviderEnum $providerEnum, array $tokenDetails): JsonResponse
+    {
+        $generatedUser = Socialite::driver($providerEnum->name)->userFromToken($tokenDetails['token']);
         if (!$generatedUser) {
-            return ApiResponse::failed("An error occurred with $providerEnum->name sign in", );
+            return ApiResponse::failed("An error occurred with $providerEnum->name sign in");
         }
 
         $user = User::query()
             ->where('email', $generatedUser->getEmail())
             ->first();
 
-//        if (!$user || $user->provider != $providerEnum->name)
+        if (!$user?->exists()) {
+            $userNames = explode(' ', $generatedUser->getName());
+            $data = [
+                'firstname' => $userNames[0],
+                'lastname' => $userNames[1] ?? '',
+                'email' => $generatedUser->getEmail(),
+                'email_verified_at' => now(),
+                'provider' => $providerEnum->name,
+                'image_url' => $generatedUser->getAvatar() ?? null,
+                'fcm_token' => $tokenDetails['fcm_token'] ?? null
+            ];
 
+            $this->createAccount($data);
+
+            $dataToken = ['token' => $user->createToken($generatedUser->getEmail())];
+            return ApiResponse::success('Account created successfully', $dataToken);
+        } elseif ($user->provider == $providerEnum->name){
+            $loginData = [
+                'email' => $generatedUser->getEmail(),
+                'fcm_token' => $tokenDetails['fcm_token'] ?? null
+            ];
+            return self::login($loginData, $providerEnum);
+        } else {
+            return ApiResponse::failed("An account with this email already exist");
+        }
     }
-
 }

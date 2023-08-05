@@ -12,7 +12,7 @@ class FirebaseApis
     {
         return [
             'Content-type' => 'application/json',
-            'Authorization' => 'key=' . env('FCM_KEY')
+            'Authorization' => 'key='.env('FCM_KEY'),
         ];
     }
 
@@ -21,26 +21,25 @@ class FirebaseApis
         $data = [
             'to' => $notification_id,
             'data' => [
-                'body' => "",
+                'body' => '',
                 'title' => $title,
                 'type' => $type,
-                "id" => $id,
-                "message" => $message,
+                'id' => $id,
+                'message' => $message,
             ],
             'notification' => [
-                "body" => $message,
-                "title" => $title,
-                "type" => $type,
-                "id" => $id,
-                "message" => $message,
-                "icon" => "new",
-                "sound" => "default"
-            ]
+                'body' => $message,
+                'title' => $title,
+                'type' => $type,
+                'id' => $id,
+                'message' => $message,
+                'icon' => 'new',
+                'sound' => 'default',
+            ],
         ];
 
         $response = Http::withHeaders(self::headers())->post(self::$fcmUrl, $data);
 
         return $response->successful();
     }
-
 }

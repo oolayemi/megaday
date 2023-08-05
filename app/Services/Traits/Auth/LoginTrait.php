@@ -4,12 +4,10 @@ namespace App\Services\Traits\Auth;
 
 use App\Models\User;
 use App\Services\Actions\OtpAction;
-use App\Services\Enums\ApiResponseEnum;
 use App\Services\Enums\ProviderEnum;
 use App\Services\Enums\UserRoleEnum;
 use App\Services\Helpers\ApiResponse;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 trait LoginTrait
@@ -21,8 +19,10 @@ trait LoginTrait
             ->where('provider', $providersEnum->name)
             ->first();
 
-        if (! $user || ! Hash::check($data['password'], $user->password) || ! in_array($role, $user->getRoleNames()->toArray())) {
-            return ApiResponse::failed("The provided credentials are incorrect.");
+        if ($providersEnum->name  == ProviderEnum::email->name) {
+            if (!$user || !Hash::check($data['password'], $user->password) || !in_array($role->name, $user->getRoleNames()->toArray())) {
+                return ApiResponse::failed('The provided credentials are incorrect.');
+            }
         }
 
         $user->update(['fcm_token' => $data['fcm_token'] ?? null]);
@@ -34,11 +34,11 @@ trait LoginTrait
             $otpAction = resolve(OtpAction::class);
 
             if ($otpAction->generateOtp($user->id)) {
-                return ApiResponse::failed("Verify your email to continue", 403, $tokenData);
+                return ApiResponse::failed('Verify your email to continue', 403, $tokenData);
             }
         }
 
-        return ApiResponse::success("User logged in successfully", $tokenData);
+        return ApiResponse::success('User logged in successfully', $tokenData);
     }
 
     public function logout(): JsonResponse
@@ -48,8 +48,6 @@ trait LoginTrait
         $user->update(['fcm_token' => null]);
         $user->currentAccessToken()->delete();
 
-        return ApiResponse::success("User logged out successfully");
+        return ApiResponse::success('User logged out successfully');
     }
-
-
 }

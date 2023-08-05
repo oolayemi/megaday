@@ -21,14 +21,16 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'first_name',
-        'last_name',
+        'firstname',
+        'lastname',
         'phone',
         'email',
         'password',
 
         'provider',
         'fcm_token',
+
+        'image_url'
     ];
 
     /**
@@ -54,5 +56,10 @@ class User extends Authenticatable
     public function otp(): HasOne
     {
         return $this->hasOne(Otp::class);
+    }
+
+    public function wallet(): HasOne
+    {
+        return $this->hasOne(Wallet::class);
     }
 }
