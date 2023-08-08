@@ -16,6 +16,7 @@ class RegisterController extends Controller
     public function registerWithEmail(RegisterRequest $request): JsonResponse
     {
         $data = $request->all();
+
         return self::register($data);
     }
 
@@ -23,10 +24,11 @@ class RegisterController extends Controller
     {
         $request->validate([
             'token' => ['required', 'string'],
-            'fcm_token' => ['nullable', 'string']
+            'fcm_token' => ['nullable', 'string'],
         ]);
 
         $data = $request->all();
+
         return self::socialSignIn(ProviderEnum::google, $data);
     }
 
@@ -34,10 +36,11 @@ class RegisterController extends Controller
     {
         $request->validate([
             'token' => ['required', 'string'],
-            'fcm_token' => ['nullable', 'string']
+            'fcm_token' => ['nullable', 'string'],
         ]);
 
         $data = $request->all();
+
         return self::socialSignIn(ProviderEnum::facebook, $data);
     }
 
@@ -45,10 +48,11 @@ class RegisterController extends Controller
     {
         $request->validate([
             'token' => ['required', 'string'],
-            'fcm_token' => ['nullable', 'string']
+            'fcm_token' => ['nullable', 'string'],
         ]);
 
         $data = $request->all();
+
         return self::socialSignIn(ProviderEnum::apple, $data);
     }
 }

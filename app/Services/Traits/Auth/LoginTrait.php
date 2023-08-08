@@ -19,8 +19,8 @@ trait LoginTrait
             ->where('provider', $providersEnum->name)
             ->first();
 
-        if ($providersEnum->name  == ProviderEnum::email->name) {
-            if (!$user || !Hash::check($data['password'], $user->password) || !in_array($role->name, $user->getRoleNames()->toArray())) {
+        if ($providersEnum->name == ProviderEnum::email->name) {
+            if (! $user || ! Hash::check($data['password'], $user->password) || ! in_array($role->name, $user->getRoleNames()->toArray())) {
                 return ApiResponse::failed('The provided credentials are incorrect.');
             }
         }

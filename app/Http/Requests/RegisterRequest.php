@@ -28,7 +28,7 @@ class RegisterRequest extends FormRequest
             'email' => ['required', 'email', 'unique:users,email'],
             'phone' => ['required', 'unique:users,phone'],
             'password' => ['required', 'dumbpwd'],
-            'fcm_token' => ['nullable','string']
+            'fcm_token' => ['nullable', 'string'],
         ];
     }
 }

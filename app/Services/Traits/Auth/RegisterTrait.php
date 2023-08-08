@@ -12,6 +12,7 @@ use Laravel\Socialite\Facades\Socialite;
 trait RegisterTrait
 {
     use LoginTrait;
+
     public function register(array $userDetails): JsonResponse
     {
         $userDetails['provider'] = ProviderEnum::email->name;
@@ -42,7 +43,7 @@ trait RegisterTrait
     public function socialSignIn(ProviderEnum $providerEnum, array $tokenDetails): JsonResponse
     {
         $generatedUser = Socialite::driver($providerEnum->name)->userFromToken($tokenDetails['token']);
-        if (!$generatedUser) {
+        if (! $generatedUser) {
             return ApiResponse::failed("An error occurred with $providerEnum->name sign in");
         }
 
@@ -50,7 +51,7 @@ trait RegisterTrait
             ->where('email', $generatedUser->getEmail())
             ->first();
 
-        if (!$user?->exists()) {
+        if (! $user?->exists()) {
             $userNames = explode(' ', $generatedUser->getName());
             $data = [
                 'firstname' => $userNames[0],
@@ -59,21 +60,23 @@ trait RegisterTrait
                 'email_verified_at' => now(),
                 'provider' => $providerEnum->name,
                 'image_url' => $generatedUser->getAvatar() ?? null,
-                'fcm_token' => $tokenDetails['fcm_token'] ?? null
+                'fcm_token' => $tokenDetails['fcm_token'] ?? null,
             ];
 
             $this->createAccount($data);
 
             $dataToken = ['token' => $user->createToken($generatedUser->getEmail())];
+
             return ApiResponse::success('Account created successfully', $dataToken);
-        } elseif ($user->provider == $providerEnum->name){
+        } elseif ($user->provider == $providerEnum->name) {
             $loginData = [
                 'email' => $generatedUser->getEmail(),
-                'fcm_token' => $tokenDetails['fcm_token'] ?? null
+                'fcm_token' => $tokenDetails['fcm_token'] ?? null,
             ];
+
             return self::login($loginData, $providerEnum);
         } else {
-            return ApiResponse::failed("An account with this email already exist");
+            return ApiResponse::failed('An account with this email already exist');
         }
     }
 }

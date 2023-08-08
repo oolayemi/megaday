@@ -30,7 +30,7 @@ class User extends Authenticatable
         'provider',
         'fcm_token',
 
-        'image_url'
+        'image_url',
     ];
 
     /**

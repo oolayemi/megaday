@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\RegisterController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\SubCategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,5 +29,21 @@ Route::prefix('v1')->group(function () {
         Route::post('register-with-google', [RegisterController::class, 'registerWithGoogle']);
         Route::post('register-with-facebook', [RegisterController::class, 'registerWithFacebook']);
         Route::post('register-with-apple', [RegisterController::class, 'registerWithApple']);
+    });
+
+    Route::prefix('category')->group(function () {
+        Route::get('all', [CategoryController::class, 'index']);
+        Route::post('add', [CategoryController::class, 'store']);
+        Route::get('show/{id}', [CategoryController::class, 'show']);
+        Route::put('update/{id}', [CategoryController::class, 'update']);
+        Route::delete('delete/{id}', [CategoryController::class, 'destroy']);
+    });
+
+    Route::prefix('sub-category')->group(function () {
+        Route::get('all', [SubCategoryController::class, 'index']);
+        Route::post('add', [SubCategoryController::class, 'store']);
+        Route::get('show/{id}', [SubCategoryController::class, 'show']);
+        Route::put('update/{id}', [SubCategoryController::class, 'update']);
+        Route::delete('delete/{id}', [SubCategoryController::class, 'destroy']);
     });
 });
