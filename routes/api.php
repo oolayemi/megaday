@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\SubCategoryController;
+use App\Http\Controllers\DealController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -45,5 +46,11 @@ Route::prefix('v1')->group(function () {
         Route::get('show/{id}', [SubCategoryController::class, 'show']);
         Route::put('update/{id}', [SubCategoryController::class, 'update']);
         Route::delete('delete/{id}', [SubCategoryController::class, 'destroy']);
+    });
+
+    Route::prefix('deals')->group(function () {
+       Route::get('all', [DealController::class, 'index']);
+       Route::get('show/{id}', [DealController::class, 'show']);
+       Route::delete('delete/{id}', [DealController::class, 'destroy']);
     });
 });

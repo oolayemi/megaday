@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -27,6 +28,24 @@ class Deal extends Model
         'reports' => 'boolean',
         'feedbacks' => 'boolean',
     ];
+
+    protected $hidden = ['super_deal_id', 'category_id', 'created_at', 'updated_at'];
+
+    public function selectedAds(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $value == null || $value == 0 ? "Unlimited" : sprintf('%s %s', $value, 'Ads'),
+        );
+    }
+
+    public function autoRenewal(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $value == null || $value == 0 ? "0" : sprintf('%s %s', $value, 'Hour(s)'),
+        );
+    }
+
+
 
     public function superDeal(): BelongsTo
     {

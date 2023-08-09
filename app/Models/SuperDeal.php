@@ -17,6 +17,8 @@ class SuperDeal extends Model
         'is_available' => 'boolean',
     ];
 
+    protected $hidden = ['created_at', 'updated_at'];
+
     public function deals(): HasMany
     {
         return $this->hasMany(Deal::class);

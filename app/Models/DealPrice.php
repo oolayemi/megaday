@@ -20,6 +20,8 @@ class DealPrice extends Model
         'duration_value' => 'integer',
     ];
 
+    protected $hidden = ['deal_id', 'created_at', 'updated_at'];
+
     public function amount(): Attribute
     {
         return Attribute::make(
