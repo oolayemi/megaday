@@ -15,6 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('deal_id')->constrained()->cascadeOnDelete();
             $table->bigInteger('amount');
+            $table->integer('duration_value');
             $table->string('duration');
             $table->timestamps();
         });

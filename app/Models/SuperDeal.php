@@ -14,7 +14,7 @@ class SuperDeal extends Model
     protected $fillable = ['name', 'is_available'];
 
     protected $casts = [
-        'is_available' => 'boolean'
+        'is_available' => 'boolean',
     ];
 
     public function deals(): HasMany

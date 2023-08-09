@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use App\Models\SubCategory;
 use App\Services\Helpers\ApiResponse;
 use Illuminate\Http\JsonResponse;
@@ -41,6 +40,7 @@ class SubCategoryController extends Controller
         unset($validated['image']);
 
         SubCategory::query()->create($validated);
+
         return ApiResponse::success('Sub categories added successfully');
     }
 
@@ -76,6 +76,7 @@ class SubCategoryController extends Controller
         }
 
         $subCategory->update($validated);
+
         return ApiResponse::success('Sub category updated successfully');
     }
 
@@ -90,6 +91,7 @@ class SubCategoryController extends Controller
         }
 
         $subCategory->delete();
+
         return ApiResponse::success('Sub category deleted successfully');
     }
 }

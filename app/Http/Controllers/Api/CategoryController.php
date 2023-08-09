@@ -72,6 +72,7 @@ class CategoryController extends Controller
         }
 
         $category->update($validated);
+
         return ApiResponse::success('Category updated successfully');
     }
 
@@ -86,6 +87,7 @@ class CategoryController extends Controller
         }
 
         $category->delete();
+
         return ApiResponse::success('Category deleted successfully');
     }
 }

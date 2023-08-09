@@ -18,12 +18,12 @@ return new class extends Migration
             $table->string('name');
             $table->integer('selected_ads')->nullable();
             $table->integer('auto_renewal')->nullable();
-            $table->string('visibility') ;
-            $table->boolean('notifications');
-            $table->boolean('promotions');
-            $table->boolean('consultations');
-            $table->boolean('reports');
-            $table->boolean('feedbacks');
+            $table->string('visibility')->default(true);
+            $table->boolean('notifications')->default(true);
+            $table->boolean('promotions')->default(true);
+            $table->boolean('consultations')->default(true);
+            $table->boolean('reports')->default(true);
+            $table->boolean('feedbacks')->default(true);
             $table->timestamps();
 
             $table->unique(['super_deal_id', 'category_id']);
