@@ -53,7 +53,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'category_id' => $propertyId,
@@ -86,7 +86,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'category_id' => $equipmentId,
@@ -119,7 +119,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'category_id' => null,
@@ -152,7 +152,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
             ],
             'Dandy' => [
@@ -187,7 +187,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'category_id' => $propertyId,
@@ -220,7 +220,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'category_id' => $equipmentId,
@@ -253,7 +253,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'category_id' => null,
@@ -286,7 +286,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
             ],
             'Nifty' => [
@@ -321,7 +321,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'category_id' => $propertyId,
@@ -354,7 +354,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'category_id' => $equipmentId,
@@ -387,7 +387,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'category_id' => null,
@@ -420,7 +420,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
             ],
             'Galore' => [
@@ -455,7 +455,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'category_id' => $propertyId,
@@ -488,7 +488,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'category_id' => $equipmentId,
@@ -521,7 +521,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'category_id' => null,
@@ -554,7 +554,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
             ],
             'Optimum' => [
@@ -589,7 +589,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'category_id' => $propertyId,
@@ -622,7 +622,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'category_id' => $equipmentId,
@@ -655,7 +655,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'category_id' => null,
@@ -688,7 +688,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
             ],
             'Mega' => [
@@ -723,7 +723,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'category_id' => $propertyId,
@@ -756,7 +756,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'category_id' => $equipmentId,
@@ -789,7 +789,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'category_id' => null,
@@ -822,7 +822,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
             ],
             'Jolly' => [
@@ -857,7 +857,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'category_id' => $propertyId,
@@ -890,7 +890,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'category_id' => $equipmentId,
@@ -923,7 +923,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'category_id' => null,
@@ -956,7 +956,7 @@ class SuperDealSeeder extends Seeder
                             'duration_value' => 12,
                             'duration' => 'Month',
                         ],
-                    ]
+                    ],
                 ],
             ],
             'Free' => [

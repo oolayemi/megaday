@@ -13,7 +13,7 @@ class DealPrice extends Model
     use HasFactory, HasUuids;
 
     protected $fillable = [
-        'deal_id', 'amount', 'duration_value', 'duration'
+        'deal_id', 'amount', 'duration_value', 'duration',
     ];
 
     protected $casts = [

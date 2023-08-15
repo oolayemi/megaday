@@ -49,8 +49,8 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::prefix('deals')->group(function () {
-       Route::get('all', [DealController::class, 'index']);
-       Route::get('show/{id}', [DealController::class, 'show']);
-       Route::delete('delete/{id}', [DealController::class, 'destroy']);
+        Route::get('all', [DealController::class, 'index']);
+        Route::get('show/{id}', [DealController::class, 'show']);
+        Route::delete('delete/{id}', [DealController::class, 'destroy']);
     });
 });

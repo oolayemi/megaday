@@ -34,18 +34,16 @@ class Deal extends Model
     public function selectedAds(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => $value == null || $value == 0 ? "Unlimited" : sprintf('%s %s', $value, 'Ads'),
+            get: fn ($value) => $value == null || $value == 0 ? 'Unlimited' : sprintf('%s %s', $value, 'Ads'),
         );
     }
 
     public function autoRenewal(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => $value == null || $value == 0 ? "0" : sprintf('%s %s', $value, 'Hour(s)'),
+            get: fn ($value) => $value == null || $value == 0 ? '0' : sprintf('%s %s', $value, 'Hour(s)'),
         );
     }
-
-
 
     public function superDeal(): BelongsTo
     {

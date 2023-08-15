@@ -16,7 +16,8 @@ class DealController extends Controller
     public function index(): JsonResponse
     {
         $superDeals = SuperDeal::with(['deals', 'deals.prices'])->get();
-        return ApiResponse::success("All deals retrieved successfully", $superDeals->toArray());
+
+        return ApiResponse::success('All deals retrieved successfully', $superDeals->toArray());
     }
 
     /**
@@ -33,10 +34,11 @@ class DealController extends Controller
     public function show($id): JsonResponse
     {
         $deal = Deal::with('prices')->find($id);
-        if (!$deal) {
-            return ApiResponse::failed("The selected deal does not exist");
+        if (! $deal) {
+            return ApiResponse::failed('The selected deal does not exist');
         }
-        return ApiResponse::success("Deal retrieved successfully", $deal->toArray());
+
+        return ApiResponse::success('Deal retrieved successfully', $deal->toArray());
     }
 
     /**
@@ -53,11 +55,12 @@ class DealController extends Controller
     public function destroy($id): JsonResponse
     {
         $deal = Deal::with('prices')->find($id);
-        if (!$deal) {
-            return ApiResponse::failed("The selected deal does not exist");
+        if (! $deal) {
+            return ApiResponse::failed('The selected deal does not exist');
         }
 
         $deal->delete();
-        return ApiResponse::success("Deal has been deleted successfully");
+
+        return ApiResponse::success('Deal has been deleted successfully');
     }
 }
