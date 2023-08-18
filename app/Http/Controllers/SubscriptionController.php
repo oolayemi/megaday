@@ -15,7 +15,10 @@ class SubscriptionController extends Controller
      */
     public function index()
     {
-        $userDeals = \request()->user()->subscriptions;
+        $userDeals = \request()->user()
+            ->subscriptions()
+            ->with(['deal', 'dealPrice', 'deal.superDeal:id,name'])
+            ->get();
 
         return ApiResponse::success('User deals retrieved successfully', $userDeals->toArray());
     }
@@ -79,9 +82,9 @@ class SubscriptionController extends Controller
     protected function getExpiryDate(DealPrice $dealPrice): Carbon
     {
         $expiresAt = Carbon::now();
-        if ($dealPrice->duration == 'month') {
+        if (strtolower($dealPrice->duration) == 'month') {
             $expiresAt->addMonths($dealPrice->duration_value);
-        } elseif ($dealPrice->duration == 'weekly') {
+        } elseif (strtolower($dealPrice->duration) == 'weekly') {
             $expiresAt->addWeeks($dealPrice->duration_value);
         } else {
             $expiresAt->addDays(2);

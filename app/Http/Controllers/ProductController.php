@@ -3,10 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateProductRequest;
+use App\Models\Category;
+use App\Models\Deal;
 use App\Models\Product;
+use App\Models\Subscription;
+use App\Models\User;
 use App\Services\Actions\MediaFileAction;
 use App\Services\Actions\ProductLocationAction;
 use App\Services\Enums\MediaTypeEnum;
+use App\Services\Enums\ProductStatusEnum;
+use App\Services\Helpers\ApiResponse;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -37,11 +43,17 @@ class ProductController extends Controller
         $data = $request->all();
         $user = $request->user();
 
+        $location = $this->locationAction->create([
+            'city' => $data['location_city'],
+            'state' => $data['location_state'],
+            'country' => $data['location_country']
+        ]);
+
         $product = Product::create([
             'user_id' => $user->id,
             'category_id' => $data['category_id'],
             'sub_category_id' => $data['sub_category_id'],
-            'product_location_id' => $this->locationAction->create($data['location'])->id,
+            'product_location_id' => $location->id,
             'name' => $data['name'],
             'description' => $data['description'] ?? null,
             'quantity' => $data['quantity'] ?? null,
@@ -68,6 +80,24 @@ class ProductController extends Controller
             ]);
         }
 
+        $categoryId = $this->getDealCategory($data['category_id']);
+
+        $userSubscriptions = $user->subscriptions()
+            ->with(['deal' => function ($query) use ($categoryId) {
+                return $query->where('category_id', $categoryId);
+            }])->whereHas('deal', function ($query) use ($categoryId) {
+                return $query->where('category_id', $categoryId);
+            })->get()->toArray();
+
+        if (empty($userSubscriptions) || !$userSubscriptions[0]['is_subscription_valid']) {
+            $product->update(['status' => ProductStatusEnum::draft->name]);
+            return ApiResponse::pending("You need to subscribe to an appropriate plan, we have saved this as draft");
+        }
+
+        $product->update(['status' => ProductStatusEnum::pending->name]);
+
+        //TODO: send mail to admin for approval
+        return ApiResponse::success("Ad successfully sent, patiently wait for approval");
     }
 
     /**
@@ -92,5 +122,17 @@ class ProductController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    protected function getDealCategory(string $categoryId)
+    {
+        $vehicleId = Category::where('name', 'Vehicles')->first()->id;
+        $propertyId = Category::where('name', 'Properties')->first()->id;
+        $equipmentId = Category::where('name', 'Industrial, Medical and Construction Tools, Equipment and Machinery')->first()->id;
+
+        return match ($categoryId) {
+            $vehicleId, $propertyId, $equipmentId => $categoryId,
+            default => null
+        };
     }
 }

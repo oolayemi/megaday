@@ -4,6 +4,6 @@ namespace App\Services\Enums;
 
 enum ProductConditionEnum
 {
-    case NEW;
-    case USED;
+    case new;
+    case used;
 }

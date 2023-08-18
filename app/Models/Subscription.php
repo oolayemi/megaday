@@ -20,7 +20,7 @@ class Subscription extends Model
     ];
 
     protected $hidden = [
-        'created_at', 'updated_at',
+        'created_at', 'updated_at', 'user_id', 'deal_id', 'deal_price_id', 'expires_at'
     ];
 
     protected $appends = ['is_subscription_valid'];

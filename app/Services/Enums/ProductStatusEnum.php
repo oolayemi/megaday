@@ -4,9 +4,9 @@ namespace App\Services\Enums;
 
 enum ProductStatusEnum
 {
-    case ACTIVE;
-    case PENDING;
-    case DECLINED;
-    case DRAFT;
-    case EXPIRED;
+    case active;
+    case pending;
+    case declined;
+    case draft;
+    case expired;
 }

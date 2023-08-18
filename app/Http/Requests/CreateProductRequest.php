@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Services\Enums\ProductConditionEnum;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
 class CreateProductRequest extends FormRequest
@@ -33,10 +34,11 @@ class CreateProductRequest extends FormRequest
             'price' => ['required', 'decimal:0,2'],
             'discount' => ['nullable', 'decimal:0,2'],
             'is_negotiable' => ['required', 'boolean'],
-            'condition' => ['required', new Enum(ProductConditionEnum::class)],
-            'location.city' => ['required', 'string'],
-            'location.state' => ['required', 'string'],
-            'location.country' => ['required', 'string'],
+            'condition' => ['required', Rule::in(['new', 'used'])],
+            'location_city' => ['required', 'string'],
+            'location_state' => ['required', 'string'],
+            'location_country' => ['required', 'string'],
+            'images' => ['required', 'array'],
             'images.*' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'video' => ['nullable', 'mimetypes:video/mp4,video/mpeg,video/quicktime', 'max:20480'],
         ];

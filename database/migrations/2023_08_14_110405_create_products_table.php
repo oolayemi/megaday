@@ -23,7 +23,8 @@ return new class extends Migration
             $table->bigInteger('price');
             $table->double('discount', 5, 2)->nullable();
             $table->boolean('is_negotiable')->nullable();
-            $table->string('status')->default('in-review');
+            $table->string('status')->default('pending');
+            $table->dateTime('expires_at')->nullable();
             $table->string('condition');
             $table->timestamps();
         });

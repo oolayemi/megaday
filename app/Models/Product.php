@@ -25,6 +25,7 @@ class Product extends Model
         'discount',
         'is_negotiable',
         'status',
+        'expires_at',
         'condition',
     ];
 
@@ -32,6 +33,7 @@ class Product extends Model
         'quantity' => 'integer',
         'discount' => 'double',
         'is_negotiable' => 'boolean',
+        'expires_at' => 'datetime'
     ];
 
     public function location(): HasOne

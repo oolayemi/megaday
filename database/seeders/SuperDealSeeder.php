@@ -13,11 +13,8 @@ class SuperDealSeeder extends Seeder
      */
     public function run(): void
     {
-        /** @noinspection UnknownColumnInspection */
         $vehicleId = Category::where('name', 'Vehicles')->first()->id;
-        /** @noinspection UnknownColumnInspection */
         $propertyId = Category::where('name', 'Properties')->first()->id;
-        /** @noinspection UnknownColumnInspection */
         $equipmentId = Category::where('name', 'Industrial, Medical and Construction Tools, Equipment and Machinery')->first()->id;
 
         $superDeals = [

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\SubCategoryController;
 use App\Http\Controllers\DealController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -55,7 +56,15 @@ Route::prefix('v1')->group(function () {
         Route::delete('delete/{id}', [DealController::class, 'destroy']);
     });
 
-    Route::prefix('products')->group(function () {
-        Route::post('add', [ProductController::class, 'store']);
+    Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
+        Route::prefix('products')->group(function () {
+            Route::post('add', [ProductController::class, 'store']);
+        });
+
+        Route::prefix('subscriptions')->group(function () {
+           Route::get('', [SubscriptionController::class, 'index']);
+           Route::post('subscribe', [SubscriptionController::class, 'store']);
+        });
     });
+
 });

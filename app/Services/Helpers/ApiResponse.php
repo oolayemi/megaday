@@ -31,6 +31,15 @@ class ApiResponse
         ], $code);
     }
 
+    public static function pending(string $message, int $code = 400, array $data = []): JsonResponse
+    {
+        return response()->json([
+            'success' => false,
+            'status' => ApiResponseEnum::pending->name,
+            'message' => $message,
+        ], $code);
+    }
+
     public static function validationError(MessageBag $errors): JsonResponse
     {
         return self::failed((new ApiResponse)->composeValidationError($errors), 422, $errors->all());
