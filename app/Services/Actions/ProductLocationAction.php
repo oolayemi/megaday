@@ -8,6 +8,6 @@ class ProductLocationAction
 {
     public function create(array $data): ProductLocation
     {
-        return ProductLocation::query()->firstOrCreate($data);
+        return ProductLocation::firstOrCreate($data);
     }
 }

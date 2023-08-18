@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\SubCategoryController;
 use App\Http\Controllers\DealController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -52,5 +53,9 @@ Route::prefix('v1')->group(function () {
         Route::get('all', [DealController::class, 'index']);
         Route::get('show/{id}', [DealController::class, 'show']);
         Route::delete('delete/{id}', [DealController::class, 'destroy']);
+    });
+
+    Route::prefix('products')->group(function () {
+        Route::post('add', [ProductController::class, 'store']);
     });
 });
