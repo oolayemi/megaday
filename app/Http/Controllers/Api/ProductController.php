@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateProductRequest;
 use App\Models\Category;
-use App\Models\Deal;
 use App\Models\Product;
-use App\Models\Subscription;
-use App\Models\User;
 use App\Services\Actions\MediaFileAction;
 use App\Services\Actions\ProductLocationAction;
 use App\Services\Enums\MediaTypeEnum;
@@ -43,12 +41,14 @@ class ProductController extends Controller
         $data = $request->all();
         $user = $request->user();
 
+        //create location
         $location = $this->locationAction->create([
             'city' => $data['location_city'],
             'state' => $data['location_state'],
             'country' => $data['location_country']
         ]);
 
+        //create product
         $product = Product::create([
             'user_id' => $user->id,
             'category_id' => $data['category_id'],
@@ -63,38 +63,45 @@ class ProductController extends Controller
             'condition' => $data['condition'],
         ]);
 
-        foreach ($request->file('images') as $key => $image) {
-            $imagePath = $this->mediaFileAction->uploadImage($image);
-            $product->mediaFiles()->create([
-                'path' => $imagePath,
-                'media_type' => MediaTypeEnum::image->name,
-                'is_featured' => $key == 0,
-            ]);
-        }
+        //upload image files
+//        foreach ($request->file('images') as $key => $image) {
+//            $imagePath = $this->mediaFileAction->uploadImage($image);
+//            $product->mediaFiles()->create([
+//                'path' => $imagePath,
+//                'media_type' => MediaTypeEnum::image->name,
+//                'is_featured' => $key == 0,
+//            ]);
+//        }
 
-        if ($request->file('video')) {
-            $videoPath = $this->mediaFileAction->uploadVideo($request->file('video'));
-            $product->mediaFiles()->create([
-                'path' => $videoPath,
-                'media_type' => MediaTypeEnum::video->name,
-            ]);
-        }
+        //upload video file (if any)
+//        if ($request->file('video')) {
+//            $videoPath = $this->mediaFileAction->uploadVideo($request->file('video'));
+//            $product->mediaFiles()->create([
+//                'path' => $videoPath,
+//                'media_type' => MediaTypeEnum::video->name,
+//            ]);
+//        }
 
         $categoryId = $this->getDealCategory($data['category_id']);
 
+        //check if user has a subscription for the product category they want to upload
         $userSubscriptions = $user->subscriptions()
             ->with(['deal' => function ($query) use ($categoryId) {
                 return $query->where('category_id', $categoryId);
             }])->whereHas('deal', function ($query) use ($categoryId) {
                 return $query->where('category_id', $categoryId);
-            })->get()->toArray();
+            })->get()
+            ->toArray();
 
         if (empty($userSubscriptions) || !$userSubscriptions[0]['is_subscription_valid']) {
             $product->update(['status' => ProductStatusEnum::draft->name]);
             return ApiResponse::pending("You need to subscribe to an appropriate plan, we have saved this as draft");
         }
 
-        $product->update(['status' => ProductStatusEnum::pending->name]);
+        $product->update([
+            'status' => ProductStatusEnum::pending->name,
+            'subscription_id' => $userSubscriptions[0]['id']
+        ]);
 
         //TODO: send mail to admin for approval
         return ApiResponse::success("Ad successfully sent, patiently wait for approval");
@@ -105,7 +112,11 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $product = Product::query()
+            ->with(['mediaFiles', 'user', 'location'])
+            ->find($id);
+
+//        $similarProducts = Product::
     }
 
     /**
@@ -124,6 +135,10 @@ class ProductController extends Controller
         //
     }
 
+    /**
+     * @param string $categoryId
+     * @return string|null
+     */
     protected function getDealCategory(string $categoryId)
     {
         $vehicleId = Category::where('name', 'Vehicles')->first()->id;

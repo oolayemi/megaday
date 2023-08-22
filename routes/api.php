@@ -3,10 +3,11 @@
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\DealController;
+use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SubCategoryController;
-use App\Http\Controllers\DealController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\Api\SubscriptionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -64,6 +65,10 @@ Route::prefix('v1')->group(function () {
         Route::prefix('subscriptions')->group(function () {
            Route::get('', [SubscriptionController::class, 'index']);
            Route::post('subscribe', [SubscriptionController::class, 'store']);
+        });
+
+        Route::prefix('dashboard')->group(function () {
+           Route::post('', DashboardController::class);
         });
     });
 

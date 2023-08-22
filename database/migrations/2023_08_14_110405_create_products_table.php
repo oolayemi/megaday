@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('subscription_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignUuid('category_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('sub_category_id')->constrained()->cascadeOnDelete();
             $table->foreignUuid('product_location_id')->nullable()->constrained()->cascadeOnDelete();
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->string('status')->default('pending');
             $table->dateTime('expires_at')->nullable();
             $table->string('condition');
+            $table->integer('views')->default(0);
             $table->timestamps();
         });
     }
