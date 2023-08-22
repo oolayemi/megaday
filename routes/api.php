@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\DealController;
+use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SubCategoryController;
 use App\Http\Controllers\Api\SubscriptionController;
@@ -60,6 +61,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
         Route::prefix('products')->group(function () {
             Route::post('add', [ProductController::class, 'store']);
+            Route::get('view/{id}', [ProductController::class, 'show']);
         });
 
         Route::prefix('subscriptions')->group(function () {
@@ -69,6 +71,10 @@ Route::prefix('v1')->group(function () {
 
         Route::prefix('dashboard')->group(function () {
            Route::post('', DashboardController::class);
+        });
+
+        Route::prefix('feedbacks')->group(function () {
+            Route::post('add', [FeedbackController::class, 'store']);
         });
     });
 

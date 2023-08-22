@@ -29,18 +29,22 @@ class Product extends Model
         'status',
         'expires_at',
         'condition',
+        'is_premium',
+        'views'
     ];
 
     protected $casts = [
         'quantity' => 'integer',
         'discount' => 'double',
         'is_negotiable' => 'boolean',
-        'expires_at' => 'datetime'
+        'expires_at' => 'datetime',
+        'views' => 'integer',
+        'is_premium' => 'boolean'
     ];
 
-    public function location(): HasOne
+    public function location(): BelongsTo
     {
-        return $this->hasOne(ProductLocation::class);
+        return $this->belongsTo(ProductLocation::class);
     }
 
     protected function price(): Attribute
@@ -64,5 +68,10 @@ class Product extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function feedbacks(): HasMany
+    {
+        return $this->hasMany(Feedback::class);
     }
 }

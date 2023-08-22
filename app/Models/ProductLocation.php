@@ -11,4 +11,10 @@ class ProductLocation extends Model
     use HasFactory, HasUuids;
 
     protected $fillable = ['city', 'state', 'country'];
+
+
+    public function products(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
 }

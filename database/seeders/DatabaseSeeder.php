@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Product;
 use App\Models\Subscription;
 use App\Services\Enums\UserRoleEnum;
 use Illuminate\Database\Seeder;
@@ -30,5 +31,7 @@ class DatabaseSeeder extends Seeder
         });
 
         Subscription::factory(10)->create();
+        Product::factory(150)->create();
+
     }
 }

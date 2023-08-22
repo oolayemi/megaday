@@ -116,7 +116,28 @@ class ProductController extends Controller
             ->with(['mediaFiles', 'user', 'location'])
             ->find($id);
 
-//        $similarProducts = Product::
+        $similarProducts = Product::query()
+            ->select(['id', 'category_id','sub_category_id', 'product_location_id', 'name','price','discount','is_premium'])
+            ->with(['subscription' => function ($query) {
+                $query->where('expires_at', '>', now());
+            }, 'mediaFiles' => function ($query) {
+                $query->where('is_featured', true);
+            }, 'location'])
+            ->whereHas('subscription', function ($query) {
+                $query->where('expires_at', '>', now());
+            })
+            ->where('sub_category_id', $product->sub_category_id)
+            ->orderByDesc('views')
+            ->orderByDesc('is_premium')
+            ->limit(10)
+            ->get();
+
+        $result = [
+            'product' => $product->toArray(),
+            'similarProducts' => $similarProducts->toArray()
+        ];
+
+        return ApiResponse::success("Product retrieved successfully", $result);
     }
 
     /**
