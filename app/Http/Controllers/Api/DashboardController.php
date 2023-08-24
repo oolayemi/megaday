@@ -38,12 +38,12 @@ class DashboardController extends Controller
      */
     protected function eachProduct(string $name, ?int $limit): array
     {
-         return Product::query()
+        return Product::query()
             ->select(['id', 'user_id', 'subscription_id', 'name', 'price', 'discount'])
             ->with(['subscription' => function ($query) {
                 $query->where('expires_at', '>', now());
             }, 'subscription.deal:id,super_deal_id',
-                'subscription.deal.superDeal' => function ($query2) use ($name)  {
+                'subscription.deal.superDeal' => function ($query2) use ($name) {
                     $query2->where('name', $name);
                 }])
             ->whereHas('subscription', function ($query) {
@@ -53,7 +53,7 @@ class DashboardController extends Controller
                 $query2->where('name', $name);
             })
             ->inRandomOrder()
-             ->limit($limit ?? 10)
+            ->limit($limit ?? 10)
             ->get()
             ->toArray();
     }

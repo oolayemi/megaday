@@ -22,7 +22,10 @@ return new class extends Migration
             $table->string('provider')->nullable();
             $table->string('fcm_token')->nullable();
 
+            $table->boolean('is_vendor_verified')->default(false);
+
             $table->string('image_url')->nullable();
+            $table->string('banner_image')->nullable();
             $table->timestamp('email_verified_at')->nullable();
 
             $table->rememberToken();

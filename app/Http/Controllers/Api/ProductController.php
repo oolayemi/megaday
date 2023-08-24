@@ -11,6 +11,7 @@ use App\Services\Actions\ProductLocationAction;
 use App\Services\Enums\MediaTypeEnum;
 use App\Services\Enums\ProductStatusEnum;
 use App\Services\Helpers\ApiResponse;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -140,6 +141,28 @@ class ProductController extends Controller
         return ApiResponse::success("Product retrieved successfully", $result);
     }
 
+    public function showBySuperDeal(Request $request)
+    {
+        $request->validate([
+            'deal_name' => 'required|exists:super_deals,name',
+        ]);
+
+        $data = $request->all();
+
+        $productsDetails = $this->productsByDeal($data['deal_name']);
+
+        $productsCount = $productsDetails->count();
+        $products = $productsDetails->paginate(50);
+
+        $result = [
+            'count' => $productsCount,
+            'products' => $products->toArray()
+        ];
+
+        return ApiResponse::success("Products by deals retrieved successfully", $result);
+
+    }
+
     /**
      * Update the specified resource in storage.
      */
@@ -170,5 +193,23 @@ class ProductController extends Controller
             $vehicleId, $propertyId, $equipmentId => $categoryId,
             default => null
         };
+    }
+
+    protected function productsByDeal(string $name): Builder
+    {
+        return Product::query()
+            ->select(['id', 'user_id', 'subscription_id', 'category_id', 'name', 'price', 'discount', 'quantity'])
+            ->with(['category:id,name','subscription' => function ($query) {
+                $query->where('expires_at', '>', now());
+            }, 'subscription.deal:id,super_deal_id',
+                'subscription.deal.superDeal' => function ($query2) use ($name) {
+                    $query2->where('name', $name);
+                }])
+            ->whereHas('subscription', function ($query) {
+                $query->where('expires_at', '>', now());
+            })
+            ->whereHas('subscription.deal.superDeal', function ($query2) use ($name) {
+                $query2->where('name', $name);
+            });
     }
 }

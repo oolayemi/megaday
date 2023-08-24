@@ -62,6 +62,7 @@ Route::prefix('v1')->group(function () {
         Route::prefix('products')->group(function () {
             Route::post('add', [ProductController::class, 'store']);
             Route::get('view/{id}', [ProductController::class, 'show']);
+            Route::post('view-by-deals', [ProductController::class, 'showBySuperDeal']);
         });
 
         Route::prefix('subscriptions')->group(function () {

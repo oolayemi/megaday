@@ -65,6 +65,16 @@ class Product extends Model
         return $this->belongsTo(Subscription::class);
     }
 
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function subCategory(): BelongsTo
+    {
+        return $this->belongsTo(SubCategory::class);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
