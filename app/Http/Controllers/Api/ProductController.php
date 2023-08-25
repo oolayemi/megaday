@@ -139,7 +139,7 @@ class ProductController extends Controller
         if ($authCheck) {
             ProductView::firstOrCreate([
                 'product_id' => $product->id,
-                'user_id' => \request()->user()->id
+                'user_id' => \request()->user()->id,
             ]);
         }
 

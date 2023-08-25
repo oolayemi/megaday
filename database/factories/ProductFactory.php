@@ -32,7 +32,7 @@ class ProductFactory extends Factory
             'price' => $this->faker->randomFloat(),
             'discount' => $this->faker->randomFloat(2, 5, 90),
             'is_negotiable' => $this->faker->boolean(70),
-            'status' => $this->faker->randomElement([ProductStatusEnum::pending->name, ProductStatusEnum::active->name, ProductStatusEnum::draft->name, ProductStatusEnum::expired->name]),
+            'status' => $this->faker->randomElement([ProductStatusEnum::pending->name, ProductStatusEnum::active->name, ProductStatusEnum::draft->name, ProductStatusEnum::sold->name]),
             'expires_at' => Carbon::now()->addWeeks(fake()->numberBetween(1, 10)),
             'condition' => $this->faker->randomElement([ProductConditionEnum::new->name, ProductConditionEnum::used->name]),
             'is_premium' => $this->faker->boolean(),

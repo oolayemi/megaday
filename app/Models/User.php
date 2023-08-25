@@ -47,7 +47,7 @@ class User extends Authenticatable
         'updated_at',
         'provider',
         'email_verified_at',
-        'roles'
+        'roles',
     ];
 
     /**

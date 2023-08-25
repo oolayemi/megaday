@@ -14,6 +14,7 @@ class ProductImpressionFactory extends Factory
     public function definition(): array
     {
         $products = Product::pluck('id');
+
         return [
             'product_id' => fake()->unique()->randomElement($products->toArray()),
             'user_id' => User::first()->id,

@@ -6,7 +6,6 @@ use App\Models\Product;
 use App\Models\ProductView;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 
 class ProductViewFactory extends Factory
 {
@@ -15,6 +14,7 @@ class ProductViewFactory extends Factory
     public function definition(): array
     {
         $products = Product::pluck('id');
+
         return [
             'product_id' => fake()->unique()->randomElement($products->toArray()),
             'user_id' => User::first()->id,

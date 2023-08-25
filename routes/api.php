@@ -13,7 +13,6 @@ use App\Http\Controllers\StoreController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Laravel\Sanctum\PersonalAccessToken;
 
 /*
 |--------------------------------------------------------------------------
@@ -88,13 +87,12 @@ Route::prefix('v1')->group(function () {
         Route::prefix('user')->group(function () {
             Route::prefix('profile')->group(function () {
                 Route::get('', [UserController::class, 'profile']);
-                Route::get('my-adverts/{status}', [UserController::class,'myAdverts']);
+                Route::get('my-adverts/{status}', [UserController::class, 'myAdverts']);
                 Route::get('feedbacks', [UserController::class, 'feedbacks']);
                 Route::get('wallet', [UserController::class, 'wallet']);
                 Route::get('subscriptions', [UserController::class, 'subscriptions']);
             });
         });
-
 
     });
 

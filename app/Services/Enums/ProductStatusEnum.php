@@ -8,5 +8,5 @@ enum ProductStatusEnum
     case pending;
     case declined;
     case draft;
-    case expired;
+    case sold;
 }

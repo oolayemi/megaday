@@ -11,8 +11,6 @@ class ProductView extends Model
 {
     use HasFactory, HasUuids;
 
-    public $timestamps = false;
-
     protected $fillable = ['product_id', 'user_id'];
 
     public function product(): BelongsTo
