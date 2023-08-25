@@ -31,7 +31,7 @@ class User extends Authenticatable
         'fcm_token',
         'image_url',
         'banner_image',
-
+        'is_vendor_verified',
     ];
 
     /**
@@ -42,6 +42,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'fcm_token',
+        'created_at',
+        'updated_at',
+        'provider',
+        'email_verified_at',
+        'roles'
     ];
 
     /**
@@ -52,6 +58,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'is_vendor_verified' => 'boolean',
     ];
 
     public function otp(): HasOne
@@ -72,5 +79,20 @@ class User extends Authenticatable
     public function feedbacks(): HasMany
     {
         return $this->hasMany(Feedback::class);
+    }
+
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function views(): HasMany
+    {
+        return $this->hasMany(ProductView::class);
+    }
+
+    public function impressions(): HasMany
+    {
+        return $this->hasMany(ProductImpression::class);
     }
 }

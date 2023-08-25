@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 
 class FeedbackController extends Controller
 {
-
     /**
      * Store a newly created resource in storage.
      */
@@ -18,7 +17,7 @@ class FeedbackController extends Controller
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'rating' => 'required|digits_between:0,2',
-            'review' => 'nullable'
+            'review' => 'nullable',
         ]);
 
         $user = $request->user();
@@ -26,12 +25,12 @@ class FeedbackController extends Controller
 
         Feedback::updateOrCreate([
             'user_id' => $user->id,
-            'product_id' => $data['product_id']
+            'product_id' => $data['product_id'],
         ], [
             'rating' => $data['rating'],
-            'review' => $data['review'] ?? null
+            'review' => $data['review'] ?? null,
         ]);
 
-        return ApiResponse::success("You have successfully rated this ad");
+        return ApiResponse::success('You have successfully rated this ad');
     }
 }

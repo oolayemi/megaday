@@ -12,6 +12,9 @@ class ProductLocation extends Model
 
     protected $fillable = ['city', 'state', 'country'];
 
+    protected $hidden = [
+        'created_at', 'updated_at',
+    ];
 
     public function products(): \Illuminate\Database\Eloquent\Relations\HasMany
     {

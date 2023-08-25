@@ -4,7 +4,10 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Product;
+use App\Models\ProductImpression;
+use App\Models\ProductView;
 use App\Models\Subscription;
+use App\Models\User;
 use App\Services\Enums\UserRoleEnum;
 use Illuminate\Database\Seeder;
 
@@ -15,23 +18,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-
         $this->call([
             RolePermissionSeeder::class,
             CategorySeeder::class,
             SuperDealSeeder::class,
         ]);
 
-        \App\Models\User::factory()->create()->each(function ($user) {
+        User::factory()->create()->each(function ($user) {
             $user->assignRole(UserRoleEnum::customer->name);
         });
 
         Subscription::factory(10)->create();
-        Product::factory(150)->create();
+        Product::factory(250)->create();
+
+        ProductView::factory(120)->create();
+        ProductImpression::factory(130)->create();
 
     }
 }

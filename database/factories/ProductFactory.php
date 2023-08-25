@@ -21,6 +21,7 @@ class ProductFactory extends Factory
         $subCategory = SubCategory::inRandomOrder()->first();
         $user = User::first();
         $subscription = Subscription::first();
+
         return [
             'category_id' => $subCategory->category_id,
             'sub_category_id' => $subCategory->id,
@@ -35,7 +36,6 @@ class ProductFactory extends Factory
             'expires_at' => Carbon::now()->addWeeks(fake()->numberBetween(1, 10)),
             'condition' => $this->faker->randomElement([ProductConditionEnum::new->name, ProductConditionEnum::used->name]),
             'is_premium' => $this->faker->boolean(),
-            'views' => $this->faker->randomNumber(3),
 
             'user_id' => $user->id,
             'subscription_id' => $subscription->id,

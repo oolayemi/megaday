@@ -2,14 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Controllers\Api\DashboardController;
-use App\Models\Deal;
 use App\Models\Product;
-use App\Models\Subscription;
-use App\Models\SuperDeal;
-use App\Models\User;
 use Illuminate\Console\Command;
-use Illuminate\Database\Query\Builder;
 
 class Testing extends Command
 {
@@ -38,13 +32,13 @@ class Testing extends Command
                 $query->where('expires_at', '>', now());
             }, 'subscription.deal:id,super_deal_id',
                 'subscription.deal.superDeal' => function ($query2) {
-                $query2->where('name', "Optimum");
-            }])
+                    $query2->where('name', 'Optimum');
+                }])
             ->whereHas('subscription', function ($query) {
                 $query->where('expires_at', '>', now());
             })
             ->whereHas('subscription.deal.superDeal', function ($query2) {
-                $query2->where('name', "Optimum");
+                $query2->where('name', 'Optimum');
             })
             ->inRandomOrder()
             ->get()

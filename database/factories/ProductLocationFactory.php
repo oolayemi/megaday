@@ -2,9 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\ProductLocation;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 
 class ProductLocationFactory extends Factory
 {

@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Product extends Model
 {
@@ -30,7 +29,7 @@ class Product extends Model
         'expires_at',
         'condition',
         'is_premium',
-        'views'
+        'views',
     ];
 
     protected $casts = [
@@ -39,12 +38,12 @@ class Product extends Model
         'is_negotiable' => 'boolean',
         'expires_at' => 'datetime',
         'views' => 'integer',
-        'is_premium' => 'boolean'
+        'is_premium' => 'boolean',
     ];
 
     public function location(): BelongsTo
     {
-        return $this->belongsTo(ProductLocation::class);
+        return $this->belongsTo(ProductLocation::class, 'product_location_id');
     }
 
     protected function price(): Attribute
@@ -83,5 +82,15 @@ class Product extends Model
     public function feedbacks(): HasMany
     {
         return $this->hasMany(Feedback::class);
+    }
+
+    public function views(): HasMany
+    {
+        return $this->hasMany(ProductView::class);
+    }
+
+    public function impressions(): HasMany
+    {
+        return $this->hasMany(ProductImpression::class);
     }
 }

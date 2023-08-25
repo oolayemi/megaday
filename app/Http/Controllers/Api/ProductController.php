@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateProductRequest;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductView;
 use App\Services\Actions\MediaFileAction;
 use App\Services\Actions\ProductLocationAction;
 use App\Services\Enums\MediaTypeEnum;
@@ -46,7 +47,7 @@ class ProductController extends Controller
         $location = $this->locationAction->create([
             'city' => $data['location_city'],
             'state' => $data['location_state'],
-            'country' => $data['location_country']
+            'country' => $data['location_country'],
         ]);
 
         //create product
@@ -65,23 +66,23 @@ class ProductController extends Controller
         ]);
 
         //upload image files
-//        foreach ($request->file('images') as $key => $image) {
-//            $imagePath = $this->mediaFileAction->uploadImage($image);
-//            $product->mediaFiles()->create([
-//                'path' => $imagePath,
-//                'media_type' => MediaTypeEnum::image->name,
-//                'is_featured' => $key == 0,
-//            ]);
-//        }
+        foreach ($request->file('images') as $key => $image) {
+            $imagePath = $this->mediaFileAction->uploadImage($image, 'product_images');
+            $product->mediaFiles()->create([
+                'path' => $imagePath,
+                'media_type' => MediaTypeEnum::image->name,
+                'is_featured' => $key == 0,
+            ]);
+        }
 
         //upload video file (if any)
-//        if ($request->file('video')) {
-//            $videoPath = $this->mediaFileAction->uploadVideo($request->file('video'));
-//            $product->mediaFiles()->create([
-//                'path' => $videoPath,
-//                'media_type' => MediaTypeEnum::video->name,
-//            ]);
-//        }
+        if ($request->file('video')) {
+            $videoPath = $this->mediaFileAction->uploadVideo($request->file('video'), 'product_videos');
+            $product->mediaFiles()->create([
+                'path' => $videoPath,
+                'media_type' => MediaTypeEnum::video->name,
+            ]);
+        }
 
         $categoryId = $this->getDealCategory($data['category_id']);
 
@@ -94,18 +95,19 @@ class ProductController extends Controller
             })->get()
             ->toArray();
 
-        if (empty($userSubscriptions) || !$userSubscriptions[0]['is_subscription_valid']) {
+        if (empty($userSubscriptions) || ! $userSubscriptions[0]['is_subscription_valid']) {
             $product->update(['status' => ProductStatusEnum::draft->name]);
-            return ApiResponse::pending("You need to subscribe to an appropriate plan, we have saved this as draft");
+
+            return ApiResponse::pending('You need to subscribe to an appropriate plan, we have saved this as draft');
         }
 
         $product->update([
             'status' => ProductStatusEnum::pending->name,
-            'subscription_id' => $userSubscriptions[0]['id']
+            'subscription_id' => $userSubscriptions[0]['id'],
         ]);
 
         //TODO: send mail to admin for approval
-        return ApiResponse::success("Ad successfully sent, patiently wait for approval");
+        return ApiResponse::success('Ad successfully sent, patiently wait for approval');
     }
 
     /**
@@ -118,7 +120,7 @@ class ProductController extends Controller
             ->find($id);
 
         $similarProducts = Product::query()
-            ->select(['id', 'category_id','sub_category_id', 'product_location_id', 'name','price','discount','is_premium'])
+            ->select(['id', 'category_id', 'sub_category_id', 'product_location_id', 'name', 'price', 'discount', 'is_premium'])
             ->with(['subscription' => function ($query) {
                 $query->where('expires_at', '>', now());
             }, 'mediaFiles' => function ($query) {
@@ -128,17 +130,25 @@ class ProductController extends Controller
                 $query->where('expires_at', '>', now());
             })
             ->where('sub_category_id', $product->sub_category_id)
-            ->orderByDesc('views')
             ->orderByDesc('is_premium')
             ->limit(10)
             ->get();
 
+        $authCheck = auth('sanctum')->check();
+
+        if ($authCheck) {
+            ProductView::firstOrCreate([
+                'product_id' => $product->id,
+                'user_id' => \request()->user()->id
+            ]);
+        }
+
         $result = [
             'product' => $product->toArray(),
-            'similarProducts' => $similarProducts->toArray()
+            'similarProducts' => $similarProducts->toArray(),
         ];
 
-        return ApiResponse::success("Product retrieved successfully", $result);
+        return ApiResponse::success('Product retrieved successfully', $result);
     }
 
     public function showBySuperDeal(Request $request)
@@ -156,10 +166,10 @@ class ProductController extends Controller
 
         $result = [
             'count' => $productsCount,
-            'products' => $products->toArray()
+            'products' => $products->toArray(),
         ];
 
-        return ApiResponse::success("Products by deals retrieved successfully", $result);
+        return ApiResponse::success('Products by deals retrieved successfully', $result);
 
     }
 
@@ -180,7 +190,6 @@ class ProductController extends Controller
     }
 
     /**
-     * @param string $categoryId
      * @return string|null
      */
     protected function getDealCategory(string $categoryId)
@@ -199,7 +208,7 @@ class ProductController extends Controller
     {
         return Product::query()
             ->select(['id', 'user_id', 'subscription_id', 'category_id', 'name', 'price', 'discount', 'quantity'])
-            ->with(['category:id,name','subscription' => function ($query) {
+            ->with(['category:id,name', 'subscription' => function ($query) {
                 $query->where('expires_at', '>', now());
             }, 'subscription.deal:id,super_deal_id',
                 'subscription.deal.superDeal' => function ($query2) use ($name) {

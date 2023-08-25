@@ -8,16 +8,16 @@ use Spatie\Image\Image;
 
 class MediaFileAction
 {
-    public function uploadImage(UploadedFile $file): string
+    public function uploadImage(UploadedFile $file, string $folderName): string
     {
         //        $this->createThumbnail();
-        return Cloudinary::upload($file->getRealPath(), ['folder' => 'product_images'])->getSecurePath();
+        return Cloudinary::upload($file->getRealPath(), ['folder' => $folderName])->getSecurePath();
 
     }
 
-    public function uploadVideo(UploadedFile $file): string
+    public function uploadVideo(UploadedFile $file, string $folderName): string
     {
-        return Cloudinary::uploadVideo($file->getRealPath(), ['folder' => 'product_videos'])->getSecurePath();
+        return Cloudinary::uploadVideo($file->getRealPath(), ['folder' => $folderName])->getSecurePath();
     }
 
     public function createThumbnail()

@@ -53,7 +53,7 @@ class SubscriptionController extends Controller
             ['expires_at' => $expiresAt]
         );
 
-        return ApiResponse::success("Subscription successful");
+        return ApiResponse::success('Subscription successful');
     }
 
     /**

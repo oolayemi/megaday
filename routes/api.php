@@ -9,8 +9,11 @@ use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SubCategoryController;
 use App\Http\Controllers\Api\SubscriptionController;
+use App\Http\Controllers\StoreController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Laravel\Sanctum\PersonalAccessToken;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +61,10 @@ Route::prefix('v1')->group(function () {
         Route::delete('delete/{id}', [DealController::class, 'destroy']);
     });
 
+    Route::prefix('store')->group(function () {
+        Route::post('{userId}', [StoreController::class, 'userStorePage']);
+    });
+
     Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
         Route::prefix('products')->group(function () {
             Route::post('add', [ProductController::class, 'store']);
@@ -66,17 +73,29 @@ Route::prefix('v1')->group(function () {
         });
 
         Route::prefix('subscriptions')->group(function () {
-           Route::get('', [SubscriptionController::class, 'index']);
-           Route::post('subscribe', [SubscriptionController::class, 'store']);
+            Route::get('', [SubscriptionController::class, 'index']);
+            Route::post('subscribe', [SubscriptionController::class, 'store']);
         });
 
         Route::prefix('dashboard')->group(function () {
-           Route::post('', DashboardController::class);
+            Route::post('', DashboardController::class);
         });
 
         Route::prefix('feedbacks')->group(function () {
             Route::post('add', [FeedbackController::class, 'store']);
         });
+
+        Route::prefix('user')->group(function () {
+            Route::prefix('profile')->group(function () {
+                Route::get('', [UserController::class, 'profile']);
+                Route::get('my-adverts/{status}', [UserController::class,'myAdverts']);
+                Route::get('feedbacks', [UserController::class, 'feedbacks']);
+                Route::get('wallet', [UserController::class, 'wallet']);
+                Route::get('subscriptions', [UserController::class, 'subscriptions']);
+            });
+        });
+
+
     });
 
 });

@@ -54,6 +54,7 @@ class Deal extends Model
     {
         return $this->hasMany(DealPrice::class);
     }
+
     public function subscriptions(): HasMany
     {
         return $this->hasMany(Subscription::class);

@@ -17,7 +17,7 @@ class UserFactory extends Factory
             'firstname' => $this->faker->firstName(),
             'lastname' => $this->faker->lastName(),
             'phone' => $this->faker->phoneNumber(),
-            'email' => "ola@gmail.com",
+            'email' => 'ola@gmail.com',
             'password' => bcrypt('Password1.'),
             'provider' => 'email',
             'fcm_token' => Str::random(10),
