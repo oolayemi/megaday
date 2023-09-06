@@ -94,6 +94,7 @@ Route::prefix('v1')->group(function () {
                 });
                 Route::get('feedbacks', [UserController::class, 'feedbacks']);
                 Route::get('wallet', [UserController::class, 'wallet']);
+                Route::get('performance', [UserController::class, 'performance']);
                 Route::get('subscriptions', [UserController::class, 'subscriptions']);
             });
         });

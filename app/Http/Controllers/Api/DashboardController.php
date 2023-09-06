@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\SuperDeal;
 use App\Models\User;
+use App\Services\Enums\ProductStatusEnum;
 use App\Services\Helpers\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -39,6 +40,7 @@ class DashboardController extends Controller
             ->withWhereHas('subscription.deal.superDeal', function ($query2) use ($name) {
                 $query2->where('name', $name);
             })
+            ->where('status', ProductStatusEnum::active->name)
             ->inRandomOrder()
             ->limit($limit ?? 10)
             ->get()

@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Services\Enums\MediaTypeEnum;
 use App\Services\Enums\ProductStatusEnum;
 use App\Services\Helpers\ApiResponse;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller
@@ -51,6 +52,42 @@ class UserController extends Controller
     {
         $wallet = \request()->user()->wallet;
         return ApiResponse::success('Wallet fetched successfully', $wallet?->toArray());
+    }
+
+    public function performance(): JsonResponse
+    {
+        $user = User::query()
+            ->withCount('views')
+            ->withCount('impressions')
+            ->find(auth()->id());
+
+        $views = $user->views->groupBy(function ($data) {
+            return Carbon::parse($data->created_at)->format('M');
+        })->map(function ($group) {
+            return $group->count(); // count the number of items in each group
+        })->toArray();
+
+        $impressions = $user->impressions->groupBy(function ($data) {
+            return Carbon::parse($data->created_at)->format('M');
+        })->map(function ($group) {
+            return $group->count(); // count the number of items in each group
+        })->toArray();
+
+        $response = [
+            'graph' => [
+                'impressions' => $impressions,
+                'visitors' => $views,
+                'chat' => []
+            ],
+            'counts' => [
+                'impressions' => $user->impressions_count,
+                'visitors' => $user->views_count,
+                'chat' => 0
+            ]
+
+        ];
+
+        return ApiResponse::success("Performance fetched successfully", $response);
     }
 
     public function markAsSold(string $productId): JsonResponse

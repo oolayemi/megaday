@@ -18,6 +18,7 @@ class ProductViewFactory extends Factory
         return [
             'product_id' => fake()->unique()->randomElement($products->toArray()),
             'user_id' => User::first()->id,
+            'created_at' => fake()->dateTimeThisYear()
         ];
     }
 }

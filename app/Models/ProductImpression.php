@@ -11,7 +11,7 @@ class ProductImpression extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $fillable = ['product_id', 'user_id'];
+    protected $fillable = ['product_id', 'user_id', 'created_at'];
 
     public function product(): BelongsTo
     {
