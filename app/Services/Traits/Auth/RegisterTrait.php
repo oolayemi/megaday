@@ -33,6 +33,12 @@ trait RegisterTrait
     protected function createAccount(array $userDetails): User
     {
         $user = User::create($userDetails);
+        $user->virtualAccount()->create([
+            'account_name' => $user->firstname . " " . $user->lastname,
+            'account_number' => rand(1000000000, 9999999999),
+            'bank_name' => 'Test Bank',
+            'account_reference' => \Str::random(17),
+        ]);
         $user->wallet()->create();
         $user->assignRole('customer');
 

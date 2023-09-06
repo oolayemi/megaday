@@ -13,6 +13,7 @@ use App\Services\Enums\MediaTypeEnum;
 use App\Services\Enums\ProductStatusEnum;
 use App\Services\Helpers\ApiResponse;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -113,10 +114,10 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
         $product = Product::query()
-            ->with(['mediaFiles', 'user', 'location'])
+            ->with(['mediaFiles', 'user', 'location', 'feedbacks'])
             ->find($id);
 
         $similarProducts = Product::query()

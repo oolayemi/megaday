@@ -87,7 +87,11 @@ Route::prefix('v1')->group(function () {
         Route::prefix('user')->group(function () {
             Route::prefix('profile')->group(function () {
                 Route::get('', [UserController::class, 'profile']);
-                Route::get('my-adverts/{status}', [UserController::class, 'myAdverts']);
+                Route::prefix('my-adverts')->group(function () {
+                    Route::get('{status}', [UserController::class, 'myAdverts']);
+                    Route::get('mark-as-sold/{productId}', [UserController::class, 'markAsSold']);
+                    Route::get('delete/{productId}', [UserController::class, 'deleteProduct']);
+                });
                 Route::get('feedbacks', [UserController::class, 'feedbacks']);
                 Route::get('wallet', [UserController::class, 'wallet']);
                 Route::get('subscriptions', [UserController::class, 'subscriptions']);

@@ -61,6 +61,11 @@ class User extends Authenticatable
         'is_vendor_verified' => 'boolean',
     ];
 
+    public function virtualAccount(): HasOne
+    {
+        return $this->hasOne(VirtualAccount::class);
+    }
+
     public function otp(): HasOne
     {
         return $this->hasOne(Otp::class);

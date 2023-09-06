@@ -28,6 +28,7 @@ return new class extends Migration
             $table->dateTime('expires_at')->nullable();
             $table->string('condition');
             $table->boolean('is_premium')->default(false);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -23,6 +23,10 @@ class ProductMediaFile extends Model
         'is_featured' => 'boolean',
     ];
 
+    protected $hidden = [
+        'created_at', 'updated_at'
+    ];
+
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
