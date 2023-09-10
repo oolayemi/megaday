@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SubCategoryController;
 use App\Http\Controllers\Api\SubscriptionController;
+use App\Http\Controllers\OfferController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -84,6 +85,10 @@ Route::prefix('v1')->group(function () {
             Route::post('add', [FeedbackController::class, 'store']);
         });
 
+        Route::prefix('offers')->group(function () {
+            Route::post('make', [OfferController::class, 'makeOffer']);
+        });
+
         Route::prefix('user')->group(function () {
             Route::prefix('profile')->group(function () {
                 Route::get('', [UserController::class, 'profile']);
@@ -97,6 +102,7 @@ Route::prefix('v1')->group(function () {
                 Route::get('performance', [UserController::class, 'performance']);
                 Route::get('subscriptions', [UserController::class, 'subscriptions']);
             });
+            Route::get('delete-account', [UserController::class, 'deleteAccount']);
         });
 
     });

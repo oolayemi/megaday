@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->integer('quantity')->nullable();
-            $table->bigInteger('price');
+            $table->decimal('price', 10);
             $table->double('discount', 5, 2)->nullable();
             $table->boolean('is_negotiable')->nullable();
             $table->string('status')->default('pending');

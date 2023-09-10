@@ -48,14 +48,6 @@ class Product extends Model
         return $this->belongsTo(ProductLocation::class, 'product_location_id');
     }
 
-    protected function price(): Attribute
-    {
-        return Attribute::make(
-            get: fn (int $value) => ($value / 100),
-            set: fn (float $value) => ($value * 100)
-        );
-    }
-
     public function mediaFiles(): HasMany
     {
         return $this->hasMany(ProductMediaFile::class);
@@ -84,6 +76,11 @@ class Product extends Model
     public function feedbacks(): HasMany
     {
         return $this->hasMany(Feedback::class);
+    }
+
+    public function offers(): HasMany
+    {
+        return $this->hasMany(Offer::class);
     }
 
     public function views(): HasMany

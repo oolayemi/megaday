@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('password')->nullable();
 
             $table->string('provider')->nullable();
-            $table->string('fcm_token')->nullable();
+            $table->text('fcm_token')->nullable();
 
             $table->boolean('is_vendor_verified')->default(false);
 
@@ -30,6 +30,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
 
             $table->rememberToken();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

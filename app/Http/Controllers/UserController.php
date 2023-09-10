@@ -114,6 +114,12 @@ class UserController extends Controller
         return ApiResponse::success("The product has been deleted");
     }
 
+    public function deleteAccount(): JsonResponse
+    {
+        request()->user()->delete();
+        return ApiResponse::success("The account has been deleted successfully");
+    }
+
 
 
 

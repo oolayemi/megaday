@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('wallets', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->unique()->constrained()->cascadeOnDelete();
-            $table->bigInteger('balance')->default(0);
+            $table->decimal('balance', 15)->default(0);
             $table->timestamps();
         });
     }

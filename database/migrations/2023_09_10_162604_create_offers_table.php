@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('deal_prices', function (Blueprint $table) {
+        Schema::create('offers', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('deal_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('seller_user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignUuid('product_id')->constrained()->cascadeOnDelete();
             $table->decimal('amount', 10);
-            $table->integer('duration_value');
-            $table->string('duration');
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('deal_prices');
+        Schema::dropIfExists('offers');
     }
 };

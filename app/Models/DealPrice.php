@@ -22,14 +22,6 @@ class DealPrice extends Model
 
     protected $hidden = ['deal_id', 'created_at', 'updated_at'];
 
-    public function amount(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => floatval($value) / 100,
-            set: fn ($value) => floatval($value) * 100
-        );
-    }
-
     public function deal(): BelongsTo
     {
         return $this->belongsTo(Deal::class);

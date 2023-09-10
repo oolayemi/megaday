@@ -14,7 +14,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuids, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasUuids, HasRoles; //SoftDeletes
 
     /**
      * The attributes that are mass assignable.
@@ -99,5 +99,10 @@ class User extends Authenticatable
     public function impressions(): HasMany
     {
         return $this->hasMany(ProductImpression::class);
+    }
+
+    public function offers(): HasMany
+    {
+        return $this->hasMany(Offer::class);
     }
 }
