@@ -29,7 +29,7 @@ class ProductFactory extends Factory
             'name' => $this->faker->name(),
             'description' => $this->faker->text(),
             'quantity' => $this->faker->randomNumber(),
-            'price' => $this->faker->randomFloat(),
+            'price' => $this->faker->randomFloat(2, 5, 10000),
             'discount' => $this->faker->randomFloat(2, 5, 90),
             'is_negotiable' => $this->faker->boolean(70),
             'status' => $this->faker->randomElement([ProductStatusEnum::pending->name, ProductStatusEnum::active->name, ProductStatusEnum::draft->name, ProductStatusEnum::sold->name]),
