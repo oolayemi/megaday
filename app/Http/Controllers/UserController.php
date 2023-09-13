@@ -120,9 +120,6 @@ class UserController extends Controller
         return ApiResponse::success("The account has been deleted successfully");
     }
 
-
-
-
     protected function getStatus($status):string|false
     {
         return in_array($status, ProductStatusEnum::cases());

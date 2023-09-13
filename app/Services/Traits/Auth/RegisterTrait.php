@@ -37,6 +37,7 @@ trait RegisterTrait
             'account_name' => $user->firstname . " " . $user->lastname,
             'account_number' => rand(1000000000, 9999999999),
             'bank_name' => 'Test Bank',
+            'account_email' => fake()->safeEmail,
             'account_reference' => \Str::random(17),
         ]);
         $user->wallet()->create();
