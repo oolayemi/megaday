@@ -42,9 +42,15 @@ class UserController extends Controller
 
     public function feedbacks(): JsonResponse
     {
-        $feedbacks = Feedback::with(['product:id,name'])->where('user_id', auth()->id())->get();
+        $feedbacks = Feedback::with([
+            'product:id,name',
+            'product.mediaFiles' => function ($query) {
+            $query->where('media_type', MediaTypeEnum::image->name)
+                ->where('is_featured', true);
+            }])
+            ->where('user_id', auth()->id())
+            ->get();
 
-            \request()->user()->feedbacks();
         return ApiResponse::success('Feedbacks fetched successfully', $feedbacks->toArray());
     }
 
@@ -120,7 +126,7 @@ class UserController extends Controller
         return ApiResponse::success("The account has been deleted successfully");
     }
 
-    protected function getStatus($status):string|false
+    protected function getStatus($status): string|false
     {
         return in_array($status, ProductStatusEnum::cases());
     }

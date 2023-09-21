@@ -36,6 +36,7 @@ class Product extends Model
 
     protected $casts = [
         'quantity' => 'integer',
+        'price' => 'double',
         'discount' => 'double',
         'is_negotiable' => 'boolean',
         'expires_at' => 'datetime',

@@ -174,6 +174,27 @@ class ProductController extends Controller
 
     }
 
+    public function searchProduct(Request $request): JsonResponse
+    {
+        $request->validate([
+            'query' => 'required|string|min:3',
+            'filter' => 'nullable|in:newest,low-price,high-price'
+        ]);
+
+        $data = $request->all();
+        $result = $this->searchProductFilter($data);
+
+        $productsCount = $result->count('id');
+        $products = $result->paginate(20);
+
+        $result = [
+            'count' => $productsCount,
+            'products' => $products->toArray(),
+        ];
+
+        return ApiResponse::success('Product retrieved successfully', $result);
+    }
+
     /**
      * Update the specified resource in storage.
      */
@@ -193,7 +214,7 @@ class ProductController extends Controller
     /**
      * @return string|null
      */
-    protected function getDealCategory(string $categoryId)
+    protected function getDealCategory(string $categoryId): ?string
     {
         $vehicleId = Category::where('name', 'Vehicles')->first()->id;
         $propertyId = Category::where('name', 'Properties')->first()->id;
@@ -203,6 +224,33 @@ class ProductController extends Controller
             $vehicleId, $propertyId, $equipmentId => $categoryId,
             default => null
         };
+    }
+
+    protected function searchProductFilter(array $data): Builder
+    {
+        $query = $data['query'];
+        $filter = $data['filter'] ?? null;
+
+        $products = Product::query()
+            ->select(['id', 'user_id', 'subscription_id', 'category_id', 'name', 'price', 'discount', 'quantity', 'created_at'])
+            ->with(['category:id,name', 'subscription' => function ($query) {
+                $query->where('expires_at', '>', now());
+            }, 'subscription.deal:id,super_deal_id'])
+            ->whereHas('subscription', function ($query) {
+                $query->where('expires_at', '>', now());
+            })
+            ->where('name', 'LIKE', "%{$query}%");
+
+        if ($filter == "high-price"){
+            $products->orderByDesc('price');
+        } elseif ($filter == "low-price") {
+            $products->orderBy('price');
+        } else {
+            $products->orderByDesc('created_at');
+        }
+
+        return $products;
+
     }
 
     protected function productsByDeal(string $name): Builder

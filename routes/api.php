@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\DealController;
+use App\Http\Controllers\Api\FavouriteController;
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SubCategoryController;
@@ -66,10 +67,18 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
+
         Route::prefix('products')->group(function () {
             Route::post('add', [ProductController::class, 'store']);
             Route::get('view/{id}', [ProductController::class, 'show']);
             Route::post('view-by-deals', [ProductController::class, 'showBySuperDeal']);
+            Route::post('search', [ProductController::class, 'searchProduct']);
+        });
+
+        Route::prefix('favourites')->group(function () {
+            Route::get('', [FavouriteController::class, 'index']);
+            Route::post('add', [FavouriteController::class, 'store'])->withoutMiddleware(['auth:sanctum', 'role:customer']);
+            Route::get('remove/{productId}', [FavouriteController::class, 'destroy']);
         });
 
         Route::prefix('subscriptions')->group(function () {
