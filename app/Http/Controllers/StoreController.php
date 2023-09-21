@@ -7,10 +7,11 @@ use App\Models\Product;
 use App\Models\User;
 use App\Services\Enums\MediaTypeEnum;
 use App\Services\Helpers\ApiResponse;
+use Illuminate\Http\JsonResponse;
 
 class StoreController extends Controller
 {
-    public function userStorePage($userId)
+    public function userStorePage($userId): JsonResponse
     {
         $user = User::query()->find($userId);
 

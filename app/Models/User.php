@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -31,6 +32,7 @@ class User extends Authenticatable
         'fcm_token',
         'image_url',
         'banner_image',
+        'phone_verified_at',
         'is_vendor_verified',
     ];
 
@@ -47,6 +49,7 @@ class User extends Authenticatable
         'updated_at',
         'provider',
         'email_verified_at',
+        'phone_verified_at',
         'roles',
     ];
 
@@ -57,13 +60,25 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'phone_verified_at' => 'datetime',
         'password' => 'hashed',
         'is_vendor_verified' => 'boolean',
     ];
 
+    protected $appends = ['unread_notification_count'];
+
     public function virtualAccount(): HasOne
     {
         return $this->hasOne(VirtualAccount::class);
+    }
+
+    public function unreadNotificationCount(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->notifications()
+                ->where('is_read', false)
+                ->count(),
+        );
     }
 
     public function otp(): HasOne
@@ -79,6 +94,11 @@ class User extends Authenticatable
     public function subscriptions(): HasMany
     {
         return $this->hasMany(Subscription::class);
+    }
+
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(Notification::class);
     }
 
     public function feedbacks(): HasMany

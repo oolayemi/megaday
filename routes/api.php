@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\DealController;
 use App\Http\Controllers\Api\FavouriteController;
 use App\Http\Controllers\Api\FeedbackController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SubCategoryController;
 use App\Http\Controllers\Api\SubscriptionController;
@@ -79,6 +80,12 @@ Route::prefix('v1')->group(function () {
             Route::get('', [FavouriteController::class, 'index']);
             Route::post('add', [FavouriteController::class, 'store'])->withoutMiddleware(['auth:sanctum', 'role:customer']);
             Route::get('remove/{productId}', [FavouriteController::class, 'destroy']);
+        });
+
+        Route::prefix('notifications')->group(function () {
+           Route::get('', [NotificationController::class, 'myNotifications']);
+           Route::get('view/{notificationId}', [NotificationController::class, 'viewNotification']);
+           Route::get('mark-all-as-read', [NotificationController::class, 'markAllAsRead']);
         });
 
         Route::prefix('subscriptions')->group(function () {
