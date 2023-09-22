@@ -2,11 +2,17 @@
 
 namespace App\Services\Traits\Auth;
 
+use App\Helpers\Helper;
+use App\Models\Otp;
 use App\Models\User;
+use App\Notifications\EmailVerificationCode;
 use App\Services\Actions\OtpAction;
 use App\Services\Enums\ProviderEnum;
 use App\Services\Helpers\ApiResponse;
+use Carbon\Carbon;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 
 trait RegisterTrait
@@ -23,11 +29,40 @@ trait RegisterTrait
         $otpAction->generateOtp($user->id);
 
         //send email verification mail
+//        $user->notify(new EmailVerificationCode());
 
         $dataToken = ['token' => $user->createToken($userDetails['email'])->plainTextToken];
 
         return ApiResponse::success('Account created successfully', $dataToken);
 
+    }
+
+    public function resendOtp(): JsonResponse
+    {
+        $user = \request()->user();
+
+        $otpAction = resolve(OtpAction::class);
+        $otpAction->generateOtp($user->id);
+
+        //send email verification mail
+//        $user->notify(new EmailVerificationCode());
+
+        return ApiResponse::success('OTP resent successfully');
+    }
+
+    public function verifyOtp(Request $request, $otp): JsonResponse
+    {
+        $user = $request->user();
+
+        $checkOtp = Otp::where('user_id', $user->id)->first();
+        if ($checkOtp->is_used || $checkOtp->expires_at < Carbon::now() || $checkOtp->code != $otp) {
+            return ApiResponse::failed('The provided otp is invalid');
+        } else {
+            $user->markEmailAsVerified();
+            $checkOtp->update(['is_used' => true]);
+            event(new Verified($user));
+            return ApiResponse::success('Email has been verified successfully');
+        }
     }
 
     protected function createAccount(array $userDetails): User
@@ -50,7 +85,7 @@ trait RegisterTrait
     public function socialSignIn(ProviderEnum $providerEnum, array $tokenDetails): JsonResponse
     {
         $generatedUser = Socialite::driver($providerEnum->name)->userFromToken($tokenDetails['token']);
-        if (! $generatedUser) {
+        if (!$generatedUser) {
             return ApiResponse::failed("An error occurred with $providerEnum->name sign in");
         }
 
@@ -58,7 +93,7 @@ trait RegisterTrait
             ->where('email', $generatedUser->getEmail())
             ->first();
 
-        if (! $user?->exists()) {
+        if (!$user?->exists()) {
             $userNames = explode(' ', $generatedUser->getName());
             $data = [
                 'firstname' => $userNames[0],

@@ -39,6 +39,11 @@ Route::prefix('v1')->group(function () {
         Route::post('register-with-google', [RegisterController::class, 'registerWithGoogle']);
         Route::post('register-with-facebook', [RegisterController::class, 'registerWithFacebook']);
         Route::post('register-with-apple', [RegisterController::class, 'registerWithApple']);
+
+        Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
+            Route::get('resend-otp', [RegisterController::class, 'sendResendOtp']);
+            Route::get('verify-otp/{otp}', [RegisterController::class, 'verifyOtp']); //done
+        });
     });
 
     Route::prefix('category')->group(function () {
@@ -67,7 +72,7 @@ Route::prefix('v1')->group(function () {
         Route::post('{userId}', [StoreController::class, 'userStorePage']);
     });
 
-    Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
+    Route::middleware(['auth:sanctum', 'role:customer', 'verified'])->group(function () {
 
         Route::prefix('products')->group(function () {
             Route::post('add', [ProductController::class, 'store']);

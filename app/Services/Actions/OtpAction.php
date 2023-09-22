@@ -7,19 +7,13 @@ use Illuminate\Support\Carbon;
 
 class OtpAction
 {
-    public function generateOtp(string $userId): bool
+    public function generateOtp(string $userId): void
     {
-        try {
-            $otp = str_pad(strval(rand(1000, 999999)), 6, '0', STR_PAD_LEFT);
+//            $otp = str_pad(strval(rand(1000, 999999)), 6, '0', STR_PAD_LEFT);
+            $otp = str_pad(strval(123456), 6, '0', STR_PAD_LEFT);
 
             Otp::query()->updateOrCreate(
                 ['user_id' => $userId],
-                ['otp' => $otp, 'is_used' => false, 'expires_at' => Carbon::now()->addMinute()]);
-
-            return true;
-
-        } catch (\Exception $e) {
-            return false;
-        }
+                ['code' => $otp, 'is_used' => false, 'expires_at' => Carbon::now()->addMinutes(5)]);
     }
 }

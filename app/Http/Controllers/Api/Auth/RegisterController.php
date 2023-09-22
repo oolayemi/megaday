@@ -16,8 +16,12 @@ class RegisterController extends Controller
     public function registerWithEmail(RegisterRequest $request): JsonResponse
     {
         $data = $request->all();
-
         return self::register($data);
+    }
+
+    public function sendResendOtp(): JsonResponse
+    {
+        return $this->resendOtp();
     }
 
     public function registerWithGoogle(Request $request): JsonResponse
