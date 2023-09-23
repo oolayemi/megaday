@@ -35,7 +35,7 @@ class DashboardController extends Controller
             ->select(['id', 'user_id', 'subscription_id', 'name', 'price', 'discount'])
             ->with(['subscription.deal:id,super_deal_id',
                 'mediaFiles' => function ($query) {
-                $query->where('is_featured', true)->first();
+                $query->where('is_featured', true);
             }])
             ->withWhereHas('subscription', function ($query) {
                 $query->where('expires_at', '>', now());
