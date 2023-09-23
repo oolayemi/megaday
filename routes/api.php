@@ -72,6 +72,10 @@ Route::prefix('v1')->group(function () {
         Route::post('{userId}', [StoreController::class, 'userStorePage']);
     });
 
+    Route::prefix('dashboard')->group(function () {
+        Route::post('', DashboardController::class);
+    });
+
     Route::middleware(['auth:sanctum', 'role:customer', 'verified'])->group(function () {
 
         Route::prefix('products')->group(function () {
@@ -96,10 +100,6 @@ Route::prefix('v1')->group(function () {
         Route::prefix('subscriptions')->group(function () {
             Route::get('', [SubscriptionController::class, 'index']);
             Route::post('subscribe', [SubscriptionController::class, 'store']);
-        });
-
-        Route::prefix('dashboard')->group(function () {
-            Route::post('', DashboardController::class);
         });
 
         Route::prefix('feedbacks')->group(function () {
