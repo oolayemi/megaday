@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Product;
+use App\Models\ProductMediaFile;
 use App\Services\Enums\MediaTypeEnum;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -14,6 +15,7 @@ class ProductMediaFileSeeder extends Seeder
      */
     public function run(): void
     {
+        ProductMediaFile::truncate();
         $images = [
             'https://media.istockphoto.com/id/173607126/photo/data-server.jpg?s=612x612&w=0&k=20&c=IMHXEMfjITKWUHoED6tl_TmRhgvdyf7F-vn3Rld8OSk=',
             'https://media.istockphoto.com/id/97891283/photo/high-performance-servers.jpg?s=612x612&w=is&k=20&c=EqtefdHgsXgosBxaiRy6DB0IkhzJXpZmrGgUpt1mN-o=',
@@ -56,7 +58,7 @@ class ProductMediaFileSeeder extends Seeder
         ];
         Product::get()->each(function (Product $product) use ($images) {
             $product->mediaFiles()->create([
-                'path' => fake()->randomElement($images),
+                'path' => $images[rand(1,37)],
                 'media_type' =>  MediaTypeEnum::image->name,
                 'is_featured' => true,
             ]);
