@@ -33,7 +33,10 @@ class DashboardController extends Controller
     {
         return Product::query()
             ->select(['id', 'user_id', 'subscription_id', 'name', 'price', 'discount'])
-            ->with('subscription.deal:id,super_deal_id')
+            ->with(['subscription.deal:id,super_deal_id',
+                'mediaFiles' => function ($query) {
+                $query->where('is_featured', true)->first();
+            }])
             ->withWhereHas('subscription', function ($query) {
                 $query->where('expires_at', '>', now());
             })
@@ -43,6 +46,7 @@ class DashboardController extends Controller
             ->where('status', ProductStatusEnum::active->name)
             ->inRandomOrder()
             ->limit($limit ?? 10)
+            ->without('subscription')
             ->get()
             ->toArray();
 

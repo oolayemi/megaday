@@ -1,25 +1,19 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Seeders;
 
 use App\Models\Product;
 use App\Services\Enums\MediaTypeEnum;
-use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ProductMediaFile>
- */
-class ProductMediaFileFactory extends Factory
+class ProductMediaFileSeeder extends Seeder
 {
     /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
+     * Run the database seeds.
      */
-    public function definition(): array
+    public function run(): void
     {
-        $productId = Product::query()->inRandomOrder()->first()->id;
-        $isFeatured = fake()->boolean;
         $images = [
             'https://media.istockphoto.com/id/173607126/photo/data-server.jpg?s=612x612&w=0&k=20&c=IMHXEMfjITKWUHoED6tl_TmRhgvdyf7F-vn3Rld8OSk=',
             'https://media.istockphoto.com/id/97891283/photo/high-performance-servers.jpg?s=612x612&w=is&k=20&c=EqtefdHgsXgosBxaiRy6DB0IkhzJXpZmrGgUpt1mN-o=',
@@ -60,15 +54,12 @@ class ProductMediaFileFactory extends Factory
             'https://media.istockphoto.com/id/1329045610/photo/flying-gamer-gears-like-mouse-keyboard-joystick-headset-vr-microphone.jpg?s=612x612&w=0&k=20&c=KmwA5iVYRp0kH77_MMEe09RAaSBLLn7hupvx_wbELuQ=',
             'https://media.istockphoto.com/id/1133856693/photo/modern-office-desk-background-top-view-with-copy-space.jpg?s=612x612&w=0&k=20&c=UX-swQafcKZRHXfYtrUzIHus6oyd7Ur09whyY5WtUEA='
         ];
-
-        return [
-            'product_id' => $productId,
-            'path' => fake()->randomElement($images),
-            'media_type' =>  fake()->randomElement(
-                $isFeatured
-                    ? [MediaTypeEnum::image->name]
-                    : [MediaTypeEnum::image->name, MediaTypeEnum::video->name]),
-            'is_featured' => $isFeatured,
-        ];
+        Product::get()->each(function (Product $product) use ($images) {
+            $product->mediaFiles()->create([
+                'path' => fake()->randomElement($images),
+                'media_type' =>  MediaTypeEnum::image->name,
+                'is_featured' => true,
+            ]);
+        });
     }
 }

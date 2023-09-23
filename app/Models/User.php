@@ -65,7 +65,7 @@ class User extends Authenticatable
         'is_vendor_verified' => 'boolean',
     ];
 
-    protected $appends = ['unread_notification_count'];
+    protected $appends = ['unread_notification_count', 'is_email_verified', 'is_phone_verified'];
 
     public function virtualAccount(): HasOne
     {
@@ -78,6 +78,20 @@ class User extends Authenticatable
             get: fn () => $this->notifications()
                 ->where('is_read', false)
                 ->count(),
+        );
+    }
+
+    public function isEmailVerified(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->email_verified_at != null,
+        );
+    }
+
+    public function isPhoneVerified(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->phone_verified_at != null,
         );
     }
 

@@ -24,7 +24,7 @@ class ProductMediaFile extends Model
     ];
 
     protected $hidden = [
-        'created_at', 'updated_at'
+        'product_id', 'created_at', 'updated_at'
     ];
 
     public function product(): BelongsTo

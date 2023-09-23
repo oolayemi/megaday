@@ -32,7 +32,9 @@ class DatabaseSeeder extends Seeder
         Subscription::factory(10)->create();
         Product::factory(250)->create();
 
-        ProductMediaFile::factory(400)->create();
+        $this->call([
+            ProductMediaFileSeeder::class
+        ]);
 
         ProductView::factory(120)->create();
         ProductImpression::factory(130)->create();

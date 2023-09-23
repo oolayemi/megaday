@@ -76,13 +76,16 @@ Route::prefix('v1')->group(function () {
         Route::post('', DashboardController::class);
     });
 
+    Route::prefix('products')->group(function () {
+        Route::get('view/{id}', [ProductController::class, 'show']);
+        Route::post('view-by-deals', [ProductController::class, 'showBySuperDeal']);
+        Route::post('search', [ProductController::class, 'searchProduct']);
+    });
+
     Route::middleware(['auth:sanctum', 'role:customer', 'verified'])->group(function () {
 
         Route::prefix('products')->group(function () {
             Route::post('add', [ProductController::class, 'store']);
-            Route::get('view/{id}', [ProductController::class, 'show']);
-            Route::post('view-by-deals', [ProductController::class, 'showBySuperDeal']);
-            Route::post('search', [ProductController::class, 'searchProduct']);
         });
 
         Route::prefix('favourites')->group(function () {
