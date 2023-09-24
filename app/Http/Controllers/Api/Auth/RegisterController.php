@@ -26,6 +26,7 @@ class RegisterController extends Controller
 
     public function registerWithGoogle(Request $request): JsonResponse
     {
+        \Log::channel('slack')->info("request login with google", $request->all());
         $request->validate([
             'token' => ['required', 'string'],
             'fcm_token' => ['nullable', 'string'],
