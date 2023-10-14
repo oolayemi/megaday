@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\RegisterController;
+use App\Http\Controllers\Api\CallBackController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\DealController;
@@ -9,8 +10,10 @@ use App\Http\Controllers\Api\FavouriteController;
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\ReportAbuseController;
 use App\Http\Controllers\Api\SubCategoryController;
 use App\Http\Controllers\Api\SubscriptionController;
+use App\Http\Controllers\Api\WishListController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\UserController;
@@ -90,8 +93,14 @@ Route::prefix('v1')->group(function () {
 
         Route::prefix('favourites')->group(function () {
             Route::get('', [FavouriteController::class, 'index']);
-            Route::post('add', [FavouriteController::class, 'store'])->withoutMiddleware(['auth:sanctum', 'role:customer']);
+            Route::post('add', [FavouriteController::class, 'store'])->withoutMiddleware(['auth:sanctum', 'role:customer','verified']);
             Route::get('remove/{productId}', [FavouriteController::class, 'destroy']);
+        });
+
+        Route::prefix('wish-lists')->group(function () {
+            Route::get('', [WishListController::class, 'index']);
+            Route::post('add', [WishListController::class, 'store'])->withoutMiddleware(['auth:sanctum', 'role:customer','verified']);
+            Route::get('remove/{productId}', [WishListController::class, 'destroy']);
         });
 
         Route::prefix('notifications')->group(function () {
@@ -103,6 +112,15 @@ Route::prefix('v1')->group(function () {
         Route::prefix('subscriptions')->group(function () {
             Route::get('', [SubscriptionController::class, 'index']);
             Route::post('subscribe', [SubscriptionController::class, 'store']);
+        });
+
+        Route::prefix('abuse')->group(function () {
+           Route::post('report', [ReportAbuseController::class, 'report'])->withoutMiddleware(['auth:sanctum', 'role:customer', 'verified']);;
+        });
+
+        Route::prefix('call-backs')->group(function () {
+           Route::get('', [CallBackController::class, 'all']);
+           Route::post('request', [CallBackController::class, 'request'])->withoutMiddleware(['auth:sanctum', 'role:customer', 'verified']);;
         });
 
         Route::prefix('feedbacks')->group(function () {

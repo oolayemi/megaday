@@ -93,4 +93,14 @@ class Product extends Model
     {
         return $this->hasMany(ProductImpression::class);
     }
+
+    public function wishLists(): HasMany
+    {
+        return $this->hasMany(WishList::class);
+    }
+
+    public function reportAbuses(): HasMany
+    {
+        return $this->hasMany(ReportAbuse::class);
+    }
 }

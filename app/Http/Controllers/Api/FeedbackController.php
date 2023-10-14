@@ -16,7 +16,7 @@ class FeedbackController extends Controller
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
-            'rating' => 'required|digits_between:0,2',
+            'rating' => 'required|digits_between:1,5',
             'review' => 'nullable',
         ]);
 

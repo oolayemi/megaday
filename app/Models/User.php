@@ -144,4 +144,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(Favourite::class);
     }
+
+    public function wishLists(): HasMany
+    {
+        return $this->hasMany(WishList::class);
+    }
+
+    public function reportAbuses(): HasMany
+    {
+        return $this->hasMany(ReportAbuse::class);
+    }
+
+    public function callBacks(): HasMany
+    {
+        return $this->hasMany(CallBack::class);
+    }
 }
